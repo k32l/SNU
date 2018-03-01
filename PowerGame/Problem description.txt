@@ -1,0 +1,35 @@
+Problem Description 
+
+Mr. John is a game designer at a game company. He recently planned a game called ‘Power Game’. In this game, each team has a power. One team can increase its power by merging other teams. The team with the highest power is the winner of the game. The specific rules of the ‘Power Game’ are as follows:
+􏰀 A player logs in to the game. Then, the player creates a new team, and becomes the leader of the team. (Note that the player is the only member of the team.) When the player creates the team, the team power is given.
+􏰀 Two different teams can be merged. The leader of the merged team is the leader of the more powerful team. The merged team’s power is the sum of the two teams’ power. If the two teams have the same power, we cannot merge the two teams.
+Your mission is to implement a program for the game. There are additional requirements for the program.
+􏰀 Your program should be able to print the leader and the power of a team.
+􏰀 If we cannot merge two teams (the two teams have the same power), your
+program should print the message “Merge Failed”.
+􏰀 You need to use ‘Path Compression’ technique to implement Find() operation in ‘ParPtrTree’ class.
+Here are several assumptions for clarity.
+􏰀 A player logs in only once, and does not log off or leave the team.
+􏰀 The maximum number of players in the game is 100,000.
+Complete “PowerGame” class supporting the above requirements. You need to fill in the “PowerGame.java”, the “ParPtrTree.java”, and “Main.java” of “PA_03” java project. You can modify the skeleton codes if you want.
+
+
+6. Sample Input
+   login 1 10
+   login 2 30
+   login 3 40
+   merge 1 2
+   printleader 1
+   printpower 1
+   merge 1 3
+7. Sample Output
+   LOGIN: 1
+   LOGIN: 2
+   LOGIN: 3
+   MERGE: 1 2
+   LEADER: 2
+   POWER: 40
+   Merge Failed
+POWER: 40
+￼
+￼
