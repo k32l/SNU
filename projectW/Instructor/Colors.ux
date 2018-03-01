@@ -1,0 +1,26 @@
+<Panel ux:Class="ColorPalette">
+	<float4 ux:Global="color0" ux:Value="#75AE30" />
+	<float4 ux:Global="color1" ux:Value="#37A1D7" />
+	<float4 ux:Global="color2" ux:Value="#FF9803" />
+	<float4 ux:Global="color3" ux:Value="#F58F87" />
+	<float4 ux:Global="color4" ux:Value="#858887" />
+	<float4 ux:Global="Green"      ux:Value="#14FFB5"/>
+	<float4 ux:Global="Purple"     ux:Value="#5E2E91"/>
+	<float4 ux:Global="TopGray"    ux:Value="#9F83BD"/>
+	<float4 ux:Global="BottomGray" ux:Value="#7E58A7"/>
+	<float4 ux:Global="GrayBlue"   ux:Value="#536e83"/>
+	<float4 ux:Global="SkyBlue"	   ux:Value="#a0ddcf"/>
+	<float4 ux:Global="Pink"	   ux:Value="#fb8472"/>
+	<float4 ux:Global="DarkGray"   ux:Value="#5a5a5a"/>
+	<float4 ux:Global="Red1"    ux:Value="#FF4241" />
+	<float4 ux:Global="Red2"    ux:Value="#F4A08A" />
+	<float4 ux:Global="Red3"    ux:Value="#880000"/>
+	<float4 ux:Global="White1"  ux:Value="#FFFEFE" />
+	<float4 ux:Global="Gray1"   ux:Value="#A89F9F" />
+	<float4 ux:Global="Gray2"   ux:Value="#DCD3D1" />
+	<float4 ux:Global="Orange1" ux:Value="#FBCE9A" />
+	<float4 ux:Global="Blue1"   ux:Value="#6A9BCD" />
+	<float4 ux:Global="Yellow1"	   ux:Value="#ffe770"/>
+	<float4 ux:Global="GrayPurple"	 ux:Value="#a58a9a"/>
+	<float4 ux:Global="PastelPurple" ux:Value="#f4efff"/>
+</Panel>

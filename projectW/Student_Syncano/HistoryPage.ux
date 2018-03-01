@@ -1,0 +1,33 @@
+<!--student's history page-->
+<Page ux:Class="HistoryPage">
+	<JavaScript File="HistoryPage.js" />
+	
+	<ScrollView>
+		<DockPanel>
+			<CogWheelReload Dock="Top" />
+			<StackPanel Padding="20,15">
+				
+				<Each Items="{courses}">								
+					<DockPanel>
+						<Image ux:Name="coursePic" File="Icons/imageedit_2_5751410499.png" Height="50" Width="50" Dock="Left" Color="Gray" />
+						
+						<!--get the course name, # of absences, # of lates and show-->
+						<StackPanel Padding="10">
+							<Text Value="{name}" FontSize="20" />
+							<Grid ColumnCount="2">
+								<Grid ColumnCount="3" Padding="0,0,10,0">
+									<Text Value="Absence: " FontSize="16" ColumnSpan="2"/>
+									<Text Value="{absence}" FontSize="16" Color="#000" Column="2" Margin="5,0,0,0"/>
+								</Grid>
+								<Grid ColumnCount="2" Padding="0,0,10,0">
+									<Text Value="Late: " FontSize="16" />
+									<Text Value="{late}" FontSize="16" Color="#000" />
+								</Grid>
+							</Grid>
+						</StackPanel>
+					</DockPanel>
+				</Each>				
+			</StackPanel>
+		</DockPanel>
+	</ScrollView>
+</Page>

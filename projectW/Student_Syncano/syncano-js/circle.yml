@@ -1,0 +1,18 @@
+machine:
+  node:
+    version: 4.4.1
+
+general:
+  branches:
+    ignore:
+      - gh-pages
+  artifacts:
+    - "coverage/"
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - npm run coverage
+      - npm run codeclimate
+      - npm run release

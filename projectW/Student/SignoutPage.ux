@@ -1,0 +1,64 @@
+<!--Shown when the menu button clicked. Ask whether to sign out.-->
+<Panel ux:Name="SignoutPage" >  
+    <JavaScript>
+        var Observable = require('FuseJS/Observable');
+        var Syncano = require('syncano-js/dist/syncano.fuse.js');
+        var ApiKeys = require("api-keys.js");
+        var classname = "student"
+        var connection = Syncano({
+            accountKey: ApiKeys.accountKey,
+            defaults: {
+                instanceName: ApiKeys.instanceName,
+                className: classname
+            }
+        });
+        var StudentObject = connection.DataObject;
+        
+        var storage = require('FuseJS/Storage');
+    
+        function signOut() {
+            userData = storage.readSync("filedb.txt");
+            json = JSON.parse(userData);
+            StudentObject.please().delete({id: json["id"]}).then(function(){}).catch(function(reason){
+                console.log("student object delete error: " + reason);
+            }); //delete data from db
+            storage.deleteSync("filedb.txt"); //delete token file
+        }
+        module.exports = { signOut: signOut };
+    </JavaScript>
+    <Rectangle ux:Name="signOutBackground" Layer="Background" />
+    <StackPanel Y="10%">
+        <Text ux:Name="signOutText" Value="Want to sign out?" Alignment="Center" TextColor="White" FontSize="30" Offset="0,-10" Opacity="0"/>
+    </StackPanel>
+
+    <Text ux:Class="EllipseText" Alignment="Center" FontSize="26"/>
+    <!--no button-->
+    <Panel ux:Name="NoButton" Alignment="Bottom"  Width="60" Height="60" Opacity="0">
+        <EllipseText Value="NO" TextColor="Orange1"/>
+        <!--when clicked, return to the main page-->
+        <Clicked>
+            <Scale Factor="0.8" Duration=".1" Easing="CubicInOut" />
+            <Toggle Target="signOutAnimation"/>            
+        </Clicked>               
+        <Circle Color="White1">
+            <DropShadow/>
+        </Circle>
+        <Translation ux:Name="ellipseTrans2" />
+        <Scaling ux:Name="ellipseScaling2" Y="0.1" X="0.1"/>
+    </Panel>
+    <!--yes button-->
+    <!--when clicked, triggers signOut function-->
+    <Panel ux:Name="YesButton" Alignment="Bottom" Width="60" Height="60" Opacity="0" >    
+        <EllipseText Value="YES" TextColor="Gray1"/>
+        <Clicked>
+            <Scale Factor="0.8" Duration=".1" Easing="CubicInOut" />
+            <Callback Handler="{signOut}" Delay="2"/>
+            <Set state.Active="loginButtonState" />
+        </Clicked>            
+        <Circle Color="White1">
+            <DropShadow/>             
+        </Circle>
+        <Translation ux:Name="ellipseTrans3" />
+        <Scaling ux:Name="ellipseScaling3" Y="0.1" X="0.1"/>
+    </Panel>
+</Panel>

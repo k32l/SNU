@@ -1,0 +1,12 @@
+<Panel>
+	<float4 ux:Global="Green"      ux:Value="#14FFB5"/>
+	<float4 ux:Global="Purple"     ux:Value="#5E2E91"/>
+	<float4 ux:Global="White"      ux:Value="#FFFFFF"/>
+	<float4 ux:Global="Gray"       ux:Value="#999999"/>
+	<float4 ux:Global="TopGray"    ux:Value="#9F83BD"/>
+	<float4 ux:Global="BottomGray" ux:Value="#7E58A7"/>
+	<float4 ux:Global="GrayBlue"   ux:Value="#536e83"/>
+	<float4 ux:Global="SkyBlue"	   ux:Value="#a0ddcf"/>
+	<float4 ux:Global="Pink"	   ux:Value="#fb8472"/>
+	<float4 ux:Global="DarkGray"   ux:Value="#5a5a5a"/>
+</Panel>

@@ -1,0 +1,239 @@
+<!--starting point of application-->
+<App>
+	<Fuse.iOS.StatusBarConfig Style="Light" />
+	<Android.StatusBarConfig Color="#cccccc"/>
+
+	<JavaScript>
+		var Observable = require("FuseJS/Observable");
+		
+		var success = Observable();
+		var fail = Observable();
+		
+		var name = Observable("");
+		var student_id = Observable("");
+		var email = Observable("");
+
+						
+		var Syncano = require('syncano-js/dist/syncano.fuse.js');
+		var ApiKeys = require("api-keys.js");
+
+		var classname = "student";
+		var connection = Syncano({
+			accountKey: ApiKeys.accountKey,
+			defaults: {
+				instanceName: ApiKeys.instanceName,
+				className: classname
+			}
+		});
+
+		var StudentObject = connection.DataObject;
+		var constraintErrMsg = Observable("");
+
+	 	function authenticate() {
+	 		// When authenticated, success will be true and fail will be false. When not authenticated, vice versa.
+
+			var studentObject = {
+				"name": name.value,
+				"student_id": student_id.value,
+				"email": email.value,
+				"device_num":11,
+				"verification":false
+				};
+
+			success.value = true;
+			fail.value = false;
+
+			// Checking constraint
+			if (name.value == ""){
+				constraintErrMsg.value = "Please enter your name";
+				return false;
+			} else if (!(/20\d{2}-\d{5}$/.test(student_id.value))){
+				constraintErrMsg.value = "Please check your student id format";
+				return false;
+			} else if (!(/.+@snu[.]ac[.]kr$/.test(email.value))){
+				constraintErrMsg.value = "Please check your SNU Email";
+				return false;
+			} else {
+				// student id, email, device number should be unique
+				doesExist = false;
+				StudentObject.please().filter({"student_id":{"_eq":student_id.value}}).then(function(response){
+					if (response.length){
+						constraintErrMsg.value = "This student id is already registered";
+						doesExist = true;
+						return;
+					}}).then(function(){
+						StudentObject.please().filter({"email":{"_eq":email.value}}).then(function(response){
+							if (response.length){
+								constraintErrMsg.value = "This email is already registered";
+								doesExist = true;
+								return;
+							}
+						});
+					}).then(function(){
+						if (doesExist){
+							return;
+						} else {
+							// If given data is unique and well-formed, put it in db
+							success.value = true;
+							fail.value = false;
+							StudentObject.please().create(studentObject).then(function (response, raw) {
+								console.log("Added class " + JSON.stringify(response));	
+								}).catch(function (reason) {
+									console.log("forceClass create error: " + reason);
+								});
+							return;
+						}
+						//TODO: Fix Bug) It shows "Try Again!"" even when it's succeeded
+						//TODO: have to get device numbers
+					})
+			}
+	 	}
+	 
+	 	module.exports = {
+	 		authenticate: authenticate,
+	 		success: success,
+	 		fail: fail,
+	 		constraintErrMsg: constraintErrMsg,
+	 		name: name,
+	 		student_id: student_id,
+	 		email: email
+	 	};
+	</JavaScript>
+	
+	<ClientPanel Color="GrayBlue">
+		<!--first page with signup button, logo picture and title-->
+		<!--signup button-->
+		<HidingPanel ux:Name="startPanel" Alignment="Bottom" Height="30%" Padding="15,0,15,15">
+			<GridLayout Rows="1*,15,15"/>
+			<Panel ux:Name="signupButton" Width="120" Height="50" Alignment="Top" HitTestMode="LocalBounds">
+				<Text Value="SIGNUP" Alignment="Center" TextColor="#5E2E91" HitTestMode="LocalBounds"/>
+				<Clicked>
+					<Set state.Active="signupFormState" />
+				</Clicked>
+			</Panel>
+			<Rectangle Color="BottomGray" Height="2" Width="55%"/>
+			<Rectangle Color="BottomGray" Height="2" Width="30%"/>
+		</HidingPanel>
+		<!--logo picture & title-->
+		<HidingPanel ux:Name="logoPanel" Alignment="Top" Height="70%" IsEnabled="true" HitTestMode="None" Layer="Background">
+			<StackPanel Alignment="Center">
+				<Image ux:Name="logo" File="Icons/imageedit_1_5851198658.png" Width="50%"/>
+				<StackPanel ux:Name="logoMockText">
+					<Text Value="Here!" FontSize="50" TextColor="SkyBlue" Alignment="Center" Margin="10">
+						<Font File="Icons/Fonts/Roboto-Regular.ttf"/>
+						<DropShadow/>
+					</Text>
+					<Text Value="-- Auto Attendance Checking system --" FontSize="20" TextColor="SkyBlue" Alignment="Center" Margin="10">
+						<Font File="Icons/Fonts/Dosis-Medium.otf"/>
+						<DropShadow/>
+					</Text>
+				</StackPanel>
+			</StackPanel>
+			<WhileTrue ux:Name="moveLogo">
+				<Change logoMockText.Opacity="0" Duration="0.4" />
+				<Move Target="logo" Y="-0.4" RelativeTo="Size" Duration="0.5" Delay="0.3" Easing="CubicInOut"/>
+			</WhileTrue>			
+
+			<WhileKeyboardVisible>
+				<Change logoPanel.IsEnabled="false" />
+			</WhileKeyboardVisible>
+		</HidingPanel>
+		
+		<Rectangle ux:Name="whiteRect" Color="White" LayoutMaster="signupButton" Layer="Background" CornerRadius="25"/>
+		<Attractor ux:Name="whiteRectCornerRadiusAttractor" Target="whiteRect.CornerRadius" Value="25" Type="SmoothSnap" Unit="Points"/>
+
+		<!--second page: signup page-->
+		<HidingPanel ux:Name="signupForm" Width="90%" Height="45%" Offset="0%,10%">
+			<Grid RowCount="3" Margin="30,40,30,60">
+				<TextInput ux:Name="nameTI" PlaceholderText="Name" Opacity="1" Alignment="VerticalCenter" PlaceholderColor="#888" Value="{name}"/>
+				<TextInput ux:Name="idTI"    PlaceholderText="Student Number(format: 20XX-XXXXX)" Opacity="1" Alignment="VerticalCenter" PlaceholderColor="#888" Value="{student_id}"/>
+				<TextInput ux:Name="emailTI" PlaceholderText="SNU Email(format: XXX@snu.ac.kr)" Opacity="1" Alignment="VerticalCenter" PlaceholderColor="#888" Value="{email}"/>
+			</Grid>
+			<WhileEnabled>
+				<Change nameTI.Opacity="1" Duration="0.4" />
+				<Change idTI.Opacity="1"    Duration="0.4" Delay="0.15" />
+				<Change emailTI.Opacity="1" Duration="0.4" Delay="0.3" />
+			</WhileEnabled>
+			
+			<!--submit button-->
+			<Panel>
+				<Panel ux:Name="submitButton" Offset="0%,50%" Width="150" Height="60">
+					<Text ux:Name="text" Alignment="Center" Value="Done" FontSize="18" TextColor="#fff"/>
+					<Panel ux:Name="loadingCirclePanel">
+						<Circle ux:Name="loadingCircle" Width="70%" Height="70%" Opacity="0" StartAngleDegrees="0" LengthAngleDegrees="90">
+							<Stroke Width="1" Brush="#fff" />
+						</Circle>
+					</Panel>
+					<!--when clicked, authenticate function will be triggered-->
+					<Clicked>
+						<Toggle Target="loading"/>
+						<Callback Handler="{authenticate}" Delay="2"/>
+					</Clicked>
+					<Rectangle ux:Name="rectNormalScale" CornerRadius="30" Fill="#fb8472" Width="100" Height="50"/>
+					<Panel ux:Name="loadingButton" Opacity="0" Width="1320" Height="1320" Alignment="Center">
+						<Circle Fill="#fb8472"/>
+						<Scaling ux:Name="loginButtonScaling" Factor="0.04545" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</HidingPanel>
+
+		<!--student's main page-->
+		<!-- <HidingPanel ux:Name="mainPanel">
+			<ux:Include File="MainView.ux"/>
+		</HidingPanel> -->
+
+		<!--instructor's main page-->
+		<HidingPanel ux:Name="mainPanel">
+			<Router ux:Name="router"/>
+			<Navigator DefaultTemplate="home">
+				<CoursePage ux:Template="home" router="router"/>
+				<MainView ux:Template="mainView" router="router" />
+			</Navigator>
+		</HidingPanel>
+
+		<!--failed page if authentication failed-->
+		<HidingPanel ux:Name="failedPanel" HitTestMode="None" Layer="Background">
+			<HidingPanel ux:Name="failedMsg" IsEnabled="true">
+				<StackPanel Padding="0,170,0,0">
+					<Text Value="{constraintErrMsg}" FontSize="25" Color="Pink" Alignment="Center"/>
+					<Text Value="Try again" FontSize="25" Color="Pink" Alignment="Center"/>
+				</StackPanel>
+			</HidingPanel>
+
+			<WhileEnabled>
+				<Change loading.Value="false" />
+			</WhileEnabled>
+
+			<WhileKeyboardVisible>
+				<Change failedMsg.IsEnabled="false" />
+			</WhileKeyboardVisible>
+		</HidingPanel>
+
+		<!--on authentication success goto main, else stay at signupFormState-->
+		<WhileTrue ux:Name="main" Value="{success}">
+			<Set state.Active="mainState"/>
+		</WhileTrue>
+		<WhileTrue ux:Name="signup" Value="{fail}">
+			<Set state.Active="failedState"/>
+		</WhileTrue>
+
+		<!--loading animation-->
+		<WhileTrue ux:Name="loading" Value="{success}">
+			<Change changeWidth.Value="true" DelayBack="0"/>
+			<Change loadCircle.Value="true" DelayBack="0"/>
+		</WhileTrue>
+		<WhileTrue ux:Name="changeWidth">
+			<Change rectNormalScale.Width="60" Duration=".5" DurationBack="0" Easing="CircularInOut"/>
+		</WhileTrue>
+		<WhileTrue ux:Name="loadCircle">
+			<Change text.Opacity="0" Duration="0.2" DurationBack="0"/>
+			<Change loadingCircle.Opacity="1" Duration="0.3" Delay="0.2" DelayBack="0" DurationBack="0"/>
+			<Spin Target="loadingCircle" Frequency="2"/>
+			<Cycle Target="loadingCircle.LengthAngleDegrees" Low="30" High="300" Frequency="0.7" />
+		</WhileTrue>
+
+		<ux:Include File="StateAnimation.ux" />
+	
+	</ClientPanel>
+</App>

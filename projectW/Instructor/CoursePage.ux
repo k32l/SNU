@@ -1,0 +1,75 @@
+<Page ux:Class="CoursePage">
+	<JavaScript File="CoursePage.js" />
+	<Router ux:Dependency="router"/>
+	
+	<Panel ux:Class="Course">
+		<Rectangle Color="White" CornerRadius="6" Height="130" Margin="10"> 
+			<string ux:Property="Time" />
+			<string ux:Property="CourseName" />
+			<string ux:Property="Total" />
+			<string ux:Property="Absence" />
+			<DropShadow />
+
+			<Clicked>
+					<Scale Factor="0.8" Duration=".15" Easing="CubicInOut" />
+			</Clicked>
+			
+			<StackPanel ux:Name="courseList" >
+	 			<DockPanel Padding="10, 10, 10, 0" Margin="10">
+					<Text Value="{Property Time}" Alignment="VerticalCenter" FontSize="30" Dock="Left" Color="Black">
+						<Font File="Assets/Fonts/Roboto-Regular.ttf"/>
+					</Text>
+					
+					<Text Value="{Property CourseName}" Alignment="Center" FontSize="22" Color="Black" Margin="10,0,0,0">
+						 <Font File="Assets/Fonts/Roboto-Regular.ttf"/>
+					</Text>				
+				</DockPanel> 
+
+				<StackPanel Padding="30,0" Alignment="Right">
+					<DockPanel ux:Name="total">
+						<Image File="Assets/person.png" Width="20" Height="20" Color="#a58a9a" Dock="Left"/>
+						<Text Value="Total :" FontSize="20" Color="Black" Margin="10,0" />					
+						<Text Value="{Property Total}" FontSize="20" Color="Black" Dock="Right"/>
+					</DockPanel>
+					<DockPanel ux:Name="absence">
+						<Image File="Assets/absent.png" Width="20" Height="20" Dock="Left"/>
+						<Text Value="Absence :" FontSize="20" Color="Black" Margin="10,0"/>						
+						<Text Value="{Property Absence}" FontSize="20" Color="Black" Dock="Right"/>					
+					</DockPanel>
+				</StackPanel>
+			</StackPanel>	
+		</Rectangle>
+	</Panel>
+
+	<!--page view-->
+	<ClientPanel>
+		<Rectangle ux:Name="bgColor" Layer="Background" Height="100%" Color="#eae2df" />
+
+		<!--top title space	-->
+		<Grid Color="GrayBlue" ColumnCount="5" Height="60" Dock="Top">
+			<ux:Include File="MenuButton.ux" />
+				<Clicked>
+					<Toggle Target="signOutAnimation"/>					 
+				</Clicked>
+			<Text ux:Name="titleText" Value="Here!" TextColor="GrayPurple" FontSize="25" Column="2" Alignment="Center"/>
+		</Grid>
+
+		<!--sign out page-->
+		<HidingPanel ux:Name="SignOutPage">
+			<ux:Include File="SignoutPage.ux" />
+		</HidingPanel>	
+					
+		<!--course list-->	
+		<ScrollView>
+			<StackPanel>
+				<CogWheelReload />
+				<StackPanel Padding="0,15">
+					<Each Items="{courses}">
+						<Course ux:Name="item" Time="{time}" CourseName="{name}" Total="{total}" Absence="{absence}" Clicked="{goToMain}" />	
+					</Each>
+				</StackPanel>
+			</StackPanel>
+		</ScrollView>	
+
+	</ClientPanel>
+</Page>

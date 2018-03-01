@@ -1,0 +1,129 @@
+<App>
+	<Fuse.iOS.StatusBarConfig Style="Light" />
+
+	<ux:Include File="Resources.ux" />
+	<ux:Include File="StateAnimation.ux" />
+	<ClientPanel Color="GrayBlue">
+		<!--signup button-->
+		<HidingPanel ux:Name="startPanel" Alignment="Bottom" Height="30%" Padding="15,0,15,15">
+			<GridLayout Rows="1*,15,15"/>
+			<Panel ux:Name="signupButton" Width="120" Height="50" Alignment="Top" HitTestMode="LocalBounds">
+				<Text Value="SIGNUP" Alignment="Center" TextColor="#5E2E91" HitTestMode="LocalBounds"/>
+				<Clicked>
+					<Set state.Active="signupFormState" />
+				</Clicked>
+			</Panel>
+			<Rectangle Color="BottomGray" Height="2" Width="55%"/>
+			<Rectangle Color="BottomGray" Height="2" Width="30%"/>
+		</HidingPanel>
+
+		<!--logo picture & title-->
+		<HidingPanel ux:Name="logoPanel" Alignment="Top" Height="70%" IsEnabled="true" HitTestMode="None" Layer="Background">
+			<StackPanel Alignment="Center">
+				<Image ux:Name="logo" File="Icons/imageedit_1_5851198658.png" Width="50%"/>
+				<StackPanel ux:Name="logoMockText">
+					<Text Value="Here!" FontSize="50" TextColor="SkyBlue" Alignment="Center" Margin="10">
+						<Font File="Icons/Fonts/Roboto-Regular.ttf"/>
+						<DropShadow/>
+					</Text>
+					<Text Value="-- Auto Attendance Checking system --" FontSize="20" TextColor="SkyBlue" Alignment="Center" Margin="10">
+						<Font File="Icons/Fonts/Dosis-Medium.otf"/>
+						<DropShadow/>
+					</Text>
+				</StackPanel>
+			</StackPanel>
+			<WhileTrue ux:Name="moveLogo">
+				<Change logoMockText.Opacity="0" Duration="0.4" />
+				<Move Target="logo" Y="-0.4" RelativeTo="Size" Duration="0.5" Delay="0.3" Easing="CubicInOut"/>
+			</WhileTrue>			
+
+			<WhileKeyboardVisible>
+				<Change logoPanel.IsEnabled="false" />
+			</WhileKeyboardVisible>
+		</HidingPanel>
+
+		
+		<Rectangle ux:Name="whiteRect" Color="White" LayoutMaster="signupButton" Layer="Background" CornerRadius="25"/>
+		<Attractor ux:Name="whiteRectCornerRadiusAttractor" Target="whiteRect.CornerRadius" Value="25" Type="SmoothSnap" Unit="Points"/>
+
+		<!--signup page-->
+		<HidingPanel ux:Name="signupForm" Width="90%" Height="45%" Offset="0%,10%">
+			<Grid RowCount="3" Margin="30,40,30,60">
+				<TextInput ux:Name="nameTI" PlaceholderText="Name" Opacity="1" Alignment="VerticalCenter" PlaceholderColor="#888"/>
+				<TextInput ux:Name="idTI"    PlaceholderText="Student/ Instructor Number" Opacity="1" Alignment="VerticalCenter" PlaceholderColor="#888"/>
+				<TextInput ux:Name="emailTI" PlaceholderText="Email" Opacity="1" Alignment="VerticalCenter" PlaceholderColor="#888"/>
+			</Grid>
+			<WhileEnabled>
+				<Change nameTI.Opacity="1" Duration="0.4" />
+				<Change idTI.Opacity="1"    Duration="0.4" Delay="0.15" />
+				<Change emailTI.Opacity="1" Duration="0.4" Delay="0.3" />
+			</WhileEnabled>
+			
+			<!--submit button-->
+			<Panel>
+				<Panel ux:Name="submitButton" Offset="0%,50%" Width="150" Height="60">
+					<Text ux:Name="text" Alignment="Center" Value="Done" FontSize="18" TextColor="#fff"/>
+					<Panel ux:Name="loadingCirclePanel">
+						<Circle ux:Name="loadingCircle" Width="70%" Height="70%" Opacity="0" StartAngleDegrees="0" LengthAngleDegrees="90">
+							<Stroke Width="1" Brush="#fff" />
+						</Circle>
+					</Panel>
+					<Clicked>
+						<Toggle Target="loading" />
+						<JavaScript>
+							var Syncano = require('syncano-js/dist/syncano.fuse.js');
+							var ApiKeys = require("api-keys.js");
+
+							var classname = "student";
+							var connection = Syncano({
+								accountKey: ApiKeys.accountKey,
+								defaults: {
+									instanceName: ApiKeys.instanceName,
+									className: classname
+								}
+							});
+
+							var StudentObject = connection.DataObject;
+							var studentObject = {
+								"name": nameTI.Value,
+								"student_id": "idTI.Value",
+								"email":"emailTI.Value",
+								"device_num":11,
+								"verification":false
+								};
+								StudentObject.please().create(studentObject).then(function (response, raw) {
+									console.log("Added class " + JSON.stringify(response));	
+								}).catch(function (reason) {
+									console.log("forceClass create error: " + reason);
+								});
+						</JavaScript>
+					<!--	<Set state.Active="mainState"/>-->
+					</Clicked>
+					<Rectangle ux:Name="rectNormalScale" CornerRadius="30" Fill="#fb8472" Width="100" Height="50"/>
+					<Panel ux:Name="loadingButton" Opacity="0" Width="1320" Height="1320" Alignment="Center">
+						<Circle Fill="#fb8472"/>
+						<Scaling ux:Name="loginButtonScaling" Factor="0.04545" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</HidingPanel>
+
+		
+
+		<!--loading animation-->
+		<WhileTrue ux:Name="loading">
+			<Change changeWidth.Value="true" DelayBack="0"/>
+			<Change loadCircle.Value="true" DelayBack="0"/>
+		</WhileTrue>
+		<WhileTrue ux:Name="changeWidth">
+			<Change rectNormalScale.Width="60" Duration=".5" DurationBack="0" Easing="CircularInOut"/>
+		</WhileTrue>
+		<WhileTrue ux:Name="loadCircle">
+			<Change text.Opacity="0" Duration="0.2" DurationBack="0"/>
+			<Change loadingCircle.Opacity="1" Duration="0.3" Delay="0.2" DelayBack="0" DurationBack="0"/>
+			<Spin Target="loadingCircle" Frequency="2"/>
+			<Cycle Target="loadingCircle.LengthAngleDegrees" Low="30" High="300" Frequency="0.7" />
+		</WhileTrue>
+	
+	</ClientPanel>
+</App>

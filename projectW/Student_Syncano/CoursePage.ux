@@ -1,0 +1,46 @@
+<Page ux:Class="CoursePage">
+	<JavaScript File="CoursePage.js" />
+
+	<Font File="Assets/Fonts/Roboto-Regular.ttf" ux:Global="RobotoRegular"/>
+	<Font File="Assets/Fonts/Dosis-Medium.otf" ux:Global="DosisMedium"/>
+
+	<Panel ux:Class="Course">
+		<Rectangle ux:Name="courseRect" Color="White" CornerRadius="6" Height="100" Margin="10"> 
+			<string ux:Property="Time" />
+			<string ux:Property="CourseName" />
+			<float4 ux:Property="CircleColor" />
+		
+			<DropShadow />
+
+			<StackPanel>
+				<!--course information: time, name, student's attendance status--> 
+	 			<DockPanel Padding="10" Margin="10,10,10,0">
+					<Text Value="{Property Time}" Alignment="VerticalCenter" FontSize="28" Dock="Left" Color="Black" Font="RobotoRegular" />
+					
+					<Text Value="{Property CourseName}" Alignment="Center" FontSize="20" Color="Black" Font="RobotoRegular" />
+				
+					<Circle Color="{Property CircleColor}" Dock="Right" Width="28" Height="30">
+						<DropShadow />
+					</Circle>				
+				</DockPanel>
+
+				<!--get enter time and exit time and show them-->
+				<DetailedInfo EnterTime="{enter}" ExitTime="{exit}" Margin="10,0,10,10"/>
+			</StackPanel>
+		</Rectangle>
+</Panel>
+
+	<!--page view-->
+	<Panel>
+		<ScrollView SnapMinTransform="false">
+			<DockPanel>
+				<CogWheelReload Dock="Top" />
+				<StackPanel>
+					<Each Items="{courses}">
+						<Course ux:Name="item" Time="{start}" CourseName="{name}" CircleColor="{color}" />
+					</Each>
+				</StackPanel>
+			</DockPanel>
+		</ScrollView>
+	</Panel>	
+</Page>

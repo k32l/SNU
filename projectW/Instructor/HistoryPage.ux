@@ -1,0 +1,21 @@
+<Page ux:Class="HistoryPage">
+	<ScrollView>
+		<StackPanel Padding="5,15">
+			<Each Items="{students}">								
+				<DockPanel Margin="7,1,7,0" >
+					<Image ux:Name="studentPic" File="Assets/Icons/account.png" Height="50" Width="50" Dock="Left" Color="Gray" Margin="7,7,0,7"/>				
+					<StackPanel Margin="7,3,7,7">
+						<Text Value="{name}" FontSize="20" />
+						<Text Value="{id}" FontSize="18" Color="#999" />
+						<StackPanel Orientation="Horizontal">
+							<Text Value="Absence: " FontSize="16"/>
+							<Text Value="{absence}" FontSize="16" Color="#000" />
+							<Text Value="Late: " Margin="30,0,0,0" FontSize="16"/>
+							<Text Value="{late}" FontSize="16" Color="#000"/>
+						</StackPanel>
+					</StackPanel>
+				</DockPanel>
+			</Each>				
+		</StackPanel>
+	</ScrollView>
+</Page>

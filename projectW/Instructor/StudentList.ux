@@ -1,0 +1,135 @@
+
+
+<Panel ux:Class="StudentListPage">
+
+	<JavaScript>
+
+	var Syncano = require('syncano-js/dist/syncano.fuse.js');
+	var ApiKeys = require("api-keys.js");
+	var classname = "attendance";
+	var connection = Syncano({
+  	accountKey: ApiKeys.accountKey,
+  	defaults: {
+    	instanceName: ApiKeys.instanceName,
+    	className: classname
+  	}
+	});
+	var Attendance = connection.DataObject;
+
+
+
+
+    var Observable = require("FuseJS/Observable");
+    var isRed = Observable(false);
+    var isGreen = Observable(false);
+    var this_color;
+    var this_num_absence;
+    
+    //for token
+	var storage = require('FuseJS/Storage');
+
+    function toggleIsRed() {
+        isRed.value = !isRed.value;
+        check_color();
+    }
+
+    function toggleIsGreen(){
+    	isGreen.value = !isGreen.value;
+    	check_color();
+    }
+
+    module.exports = {
+        isRed: isRed,
+        toggleIsRed: toggleIsRed,
+        isGreen: isGreen,
+        toggleIsGreen: toggleIsGreen
+    };
+
+
+    function check_color(){
+    //num_absent will be provided from db
+    	if(isRed){
+    		this_color = 0;
+    		this_num_absent = 1;
+    	} else if (isGreen) { 
+    		this_color = 1;
+    	}
+
+    	var query = {
+   		"num_absence": this_num_absence,
+ 		"color": this_color
+ 	
+		};
+
+
+		Attendance.please().create(query).then(function(query) {
+  		console.log("query", query)
+		});
+	}
+
+    
+  
+
+
+	</JavaScript>
+
+	<Panel ux:Class="StudentList">
+		<Rectangle Color="White" CornerRadius="6" Height="50" Margin="20, 5"> 
+			<Clicked>
+				<Toggle Target="redState"/>		
+				<Toggle Target="greenState"/>
+			</Clicked>		
+			
+			<string ux:Property="StudentID" />
+			<string ux:Property="StudentName" />
+			<float4 ux:Property="CircleColor" />
+
+			<DropShadow />
+
+			<DockPanel Margin="20, 0">
+				<Text Value="{Property StudentID}"  FontSize="18" Color="DarkGray" Dock="Left" Alignment="VerticalCenter" />
+					
+				<Text Value="{Property StudentName}" FontSize="20" Color="Black" Alignment="VerticalCenter" Margin="20,0" />
+				
+				<Circle ux:Name="Attendance" Color="{Property CircleColor}" Width="30" Height="30" Alignment="Right">
+					<DropShadow />
+					<Clicked>
+						<Scale Factor="0.8" Duration=".15" Easing="CubicInOut" 
+						/>
+						 <Callback Handler="{toggleIsRed}"/>
+						 <Callback Handler="{toggleIsRed}"/>
+					</Clicked>
+				</Circle>															
+			</DockPanel>			
+		</Rectangle> 
+
+		<WhileTrue ux:Name="redState" Value="{isRed}">
+			<Change Attendance.Color="#ec0707" Duration="0.2" />
+			
+		</WhileTrue>
+		<WhileTrue ux:Name="greenState" Value="{isGreen}">
+			<Change Attendance.Color="#1e852f" Duration="0.2"/>
+		</WhileTrue>						
+	</Panel>
+
+
+	<!--page view-->
+	<Panel>
+		<ScrollView>
+			<StackPanel Padding="0,10">
+				<Each Items="{students}">
+					<StudentList ux:Name="item" StudentID="{id}" StudentName="{name}" CircleColor="{color}"/>
+				</Each>
+
+				<Rectangle ux:Name="save" Color="GrayBlue" CornerRadius="6" Height="30" Width="50" Margin="20,10" Alignment="Right">
+					<Text Value="Save" Color="White" FontSize="15" Alignment="Center" Clicked="{save}"/>
+					<Clicked>
+						<Scale Factor="0.8" Duration=".1" Easing="CubicInOut" />
+					</Clicked>	
+					<DropShadow/>						
+				</Rectangle>  					
+			</StackPanel>
+		</ScrollView>
+	</Panel>
+
+</Panel>

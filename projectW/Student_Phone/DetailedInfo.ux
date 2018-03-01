@@ -1,0 +1,64 @@
+<!--showing student's enter time and exit time animation-->
+<Panel ux:Class="DetailedInfo">
+	<string ux:Property="EnterTime" />
+	<string ux:Property="ExitTime" />
+	<Grid ux:Name="infoButtons" Columns="40,1*,1*" Opacity="0">
+		<!--enter time-->
+		<DockPanel ux:Name="enterTime" Alignment="Center" Column="1" HitTestMode="LocalBoundsAndChildren">
+			<Image File="Assets/imageedit_3_9622675366.png" Dock="Left" Width="16" Color="#536e83"/>
+			<Text Value="Enter: " Margin="5,0" Color="#536e83" FontSize="16"/>
+			<Text Value="{Property EnterTime}" Dock="Right" Color="#536e83"/>
+			<Scaling ux:Name="enterScaling" Factor="0.2"/>
+			<Clicked>
+				<Toggle Target="revealAnimation" />
+			</Clicked>
+		</DockPanel>
+		<!--exit time-->
+		<DockPanel ux:Name="exitTime" Alignment="Center" Margin="5,0,0,0" Column="2" HitTestMode="LocalBoundsAndChildren">
+			<Image File="Assets/imageedit_6_3927383195.png" Dock="Left"  Width="16" Color="#536e83"/>
+			<Text Value="Exit: "  Margin="5,0" Color="#536e83" FontSize="16"/>
+			<Text Value="{Property ExitTime}" Dock="Right" Color="#536e83"/>
+			<Scaling ux:Name="exitScaling" Factor="0.2"/>
+			<Clicked>
+				<Toggle Target="revealAnimation" />
+			</Clicked>
+		</DockPanel>
+	</Grid>
+	<Panel ux:Name="sp" Alignment="Right">
+		<LayoutAnimation>
+			<Move X="1" Duration="0.3" RelativeTo="LayoutChange" Easing="BackIn" />
+		</LayoutAnimation>
+		<Panel Width="40" Alignment="Right" HitTestMode="LocalBoundsAndChildren">
+			<Rectangle ux:Name="dividerRect" Width="1" Height="60%" Fill="#ddd" Alignment="Right" Opacity="0" Offset="10,0"/>
+			<Image ux:Name="arrow" File="Assets/arrow.png" Width="16" Opacity="0" />
+			<Circle Width="20" Height="20" ux:Name="c1" Fill="#536e83" Alignment="Left">
+				<Scaling ux:Name="circleScale1" Factor="0.25" />
+			</Circle>
+			<Circle Width="20" Height="20" ux:Name="c2" Fill="#536e83" Alignment="HorizontalCenter">
+				<Scaling ux:Name="circleScale2" Factor="0.25" />
+			</Circle>
+			<Circle Width="20" Height="20" ux:Name="c3" Fill="#536e83" Alignment="Right">
+				<Scaling ux:Name="circleScale3" Factor="0.25" />
+			</Circle>
+			<Clicked>
+				<Toggle Target="revealAnimation"/>
+			</Clicked>
+		</Panel>
+
+		<WhileTrue ux:Name="revealAnimation">
+			<Change sp.Alignment="Left" DurationBack="0"/>
+			<Change circleScale1.Factor="1" Duration="0.3" DelayBack="0"/>
+			<Change circleScale2.Factor="1" Duration="0.3" DelayBack="0.025"/>
+			<Change circleScale3.Factor="1" Duration="0.3" DelayBack="0.05"/>
+			<Move Target="c1" X="0.5" RelativeTo="Size" Duration=".5" DelayBack="0"/>
+			<Move Target="c3" X="-0.5" RelativeTo="Size" Duration=".5" DelayBack="0"/>
+
+			<Change infoButtons.Opacity="1" Duration="0.4" DurationBack=".2" />
+
+			<Change Easing="BackOut" exitScaling.Factor="1"  Duration="0.5" DelayBack="0.1" DurationBack="0.1"/>
+			<Change Easing="BackOut" enterScaling.Factor="1" Duration="0.5" Delay="0.1" DelayBack="0" DurationBack="0.1"/>
+			<Change arrow.Opacity="1"       Duration="0.4"             DurationBack="0.15" DelayBack="0"/>
+			<Change dividerRect.Opacity="1" Duration="0.2" Delay="0.2" DurationBack="0.15" DelayBack="0"/>
+		</WhileTrue>
+	</Panel>
+</Panel>

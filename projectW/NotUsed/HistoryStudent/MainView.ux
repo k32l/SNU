@@ -1,0 +1,51 @@
+<App Background="#eeeeeeff">
+	<DockPanel>
+		<JavaScript File="MainView.js" />
+
+		<Font File="Assets/Nunito-Regular.ttf" ux:Global="NunitoRegular"/>
+		<Font File="Assets/Nunito-Light.ttf" ux:Global="NunitoLight" />
+		<Font File="Assets/Nunito-Bold.ttf" ux:Global="NunitoBold" />
+		<Text ux:Class="Body" Font="NunitoRegular" TextColor="#fff" FontSize="18" Alignment="Left"/>
+		<Fuse.iOS.StatusBarConfig Style="Light" />
+
+		<StackPanel Dock="Top" Background="#8ba892">
+			<StatusBarBackground/>
+			<Text Margin="5,5,0,5" Alignment="Left" FontSize="18" Font="NunitoBold" TextColor="#ffffff80"> Attendance History </Text>
+		</StackPanel>
+		<BottomBarBackground Dock="Bottom" />
+
+
+		<Panel Dock="Fill">
+			<LinearNavigation ux:Name="lnav">
+				<NavigationMotion Overflow="Clamp" GotoDuration="0.3" GotoEasing="QuadraticOut" />
+			</LinearNavigation>
+			<SwipeNavigate SwipeDirection="Down" />
+			<Each Items="{tabs}">
+				<Page ClipToBounds="true" Background="{bgcolor}">
+					<Translation Y="{ypos}" RelativeTo="Size"/>
+
+				
+
+					<StackPanel Width="43%" Alignment="TopLeft" Height="100%" Margin="20">
+						<Text Value="{TOD}"  Font="NunitoBold"  FontSize="25" TextColor="#ffffff80" Margin="0,14,0,0"/>
+						
+						<StackPanel Alignment="TopLeft">
+							<Body Value="{Total}"  />
+							<Body Value="{Absence}" />
+							<Body Value="{Late}" />
+							<ExitingAnimation>
+								<Move Y="0.5" RelativeTo="ParentSize" Easing="Linear" />
+							</ExitingAnimation>
+							<EnteringAnimation>
+								<Move Y="0.5" RelativeTo="ParentSize" Easing="Linear"/>
+							</EnteringAnimation>
+						</StackPanel>
+					</StackPanel>
+					<EnteringAnimation>
+						<Move Y="0.3334" RelativeTo="Size"/>
+					</EnteringAnimation>
+				</Page>
+			</Each>
+		</Panel>
+	</DockPanel>
+</App>

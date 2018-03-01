@@ -1,0 +1,30 @@
+<!--ask sign out animation-->
+<WhileTrue ux:Name="signOutAnimation">
+    <Change SignOutPage.IsEnabled="true" DelayBack="0" />
+
+    <Change rect2.Width="5" Duration="0.1" Easing="BounceOut" EasingBack="BounceIn" DelayBack="0.3"/>
+    <Move Target="rect1" Easing="QuadraticInOut" Y="1.5" RelativeTo="Size" Duration="0.1" />
+    <Move Target="rect3" Easing="QuadraticInOut" Y="-1.5" RelativeTo="Size" Duration="0.1" />
+    <Rotate Target="rect1" Easing="QuadraticInOut" Degrees="45" Duration="0.05" Delay="0.25" DelayBack="0"/>
+    <Rotate Target="rect3" Easing="QuadraticInOut" Degrees="-45" Duration="0.05" Delay="0.25" DelayBack="0"/>         
+    
+    <Change signOutText.Offset="0,0" Duration="0.2" Delay="0.22" DelayBack="0" Easing="CubicOut"/>
+    <Change signOutText.Opacity="1" Duration="0.2" Delay="0.22" DelayBack="0"/>
+    <Change signOutBackground.Color="#000d" Duration="0.15" DelayBack="0.25"/>
+
+    <Change Target="ellipseScaling2.Vector">
+        <Keyframe Time="0.15" Value="1.0,1.4"/>
+        <Keyframe Time="0.3" Value="1.0,0.9"/>
+        <Keyframe Time="0.4" Value="1.0,1.0"/>
+    </Change>
+    <Change ellipseTrans2.Y="-160"  Duration="0.25" Delay="0" Easing="QuinticInOut" />
+    <Change NoButton.Opacity="1" Duration="0.4" Easing="QuinticOut"/>   
+
+    <Change Target="ellipseScaling3.Vector">
+        <Keyframe Time="0.2" Value="1.0,1.6"/>
+        <Keyframe Time="0.3" Value="1.0,0.9"/>
+        <Keyframe Time="0.4" Value="1.0,1.0"/>
+    </Change>
+    <Change ellipseTrans3.Y="-240" Duration="0.3" Delay="0" Easing="QuinticInOut"/>
+    <Change YesButton.Opacity="1" Duration="0.45" Easing="QuinticOut"/>  
+</WhileTrue>

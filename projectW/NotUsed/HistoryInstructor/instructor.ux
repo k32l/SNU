@@ -1,0 +1,93 @@
+<App Background="#fff">
+	<DockPanel>
+		<JavaScript>
+			var Observable = require("FuseJS/Observable");
+
+			function Content(icon, student_id, student_name, absence, late) {
+				this.student_id = student_id;
+				this.student_name = student_name;
+				this.icon = icon;
+				this.absence = absence;
+				this.late = late;
+			}
+
+			var content = Observable(
+				
+				
+				new Content("contact1", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact2", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact3", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact4", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact1", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact2", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact3", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3"),
+				new Content("contact4", "2013-00000", "Hong Gil Dong", "Absence: 10", "Late: 3")
+
+
+				
+			);
+
+			
+
+			module.exports = {
+				content: content,
+				
+			};
+		</JavaScript>
+		<Font File="Assets/Fonts/RobotoCondensed-Bold.ttf" ux:Global="Bold" />
+		<Font File="Assets/Fonts/RobotoCondensed-Regular.ttf" ux:Global="Regular" />
+		<Font File="Assets/Fonts/RobotoCondensed-Light.ttf" ux:Global="Light" />
+
+		<FileImageSource ux:Key="contact1" File="Assets/Contacts/Contact1.png" />
+		<FileImageSource ux:Key="contact2" File="Assets/Contacts/Contact2.png" />
+ 		<FileImageSource ux:Key="contact3" File="Assets/Contacts/Contact3.png" />
+		<FileImageSource ux:Key="contact4" File="Assets/Contacts/Contact4.png" />
+
+		<StackPanel Dock="Top" Background="#79f">
+			<StatusBarBackground />
+			<Fuse.iOS.StatusBarConfig Style="Light" />
+			<Panel>
+				<Image File="Assets/Icons/menu.png" Alignment="CenterLeft" Margin="10" Height="15" Offset="0,2" />
+				<Text Value="Attendance History" TextAlignment="Center" Color="#fff" Font="Bold" FontSize="24" Margin="0,10,0,5" />
+			</Panel>
+		</StackPanel>
+		<BottomBarBackground Dock="Bottom" />
+		<ScrollView>
+			<StackPanel>
+				<Each Items="{content}">
+					<Panel>
+						<PageControl Active="contents">
+							
+							<Page Background="#fff" ux:Name="contents">
+								<DockPanel Margin="7,1,7,0">
+									<Circle Height="50" Width="50" Dock="Left" Margin="7,7,0,7" Alignment="TopLeft">
+										<ImageFill Source="{DataToResource icon}" />
+									</Circle>
+
+									<StackPanel Margin="7,3,7,7">
+										<Text Font="Regular" Value="{student_name}" FontSize="16" />
+										<Text Font="Regular" Value="{student_id}" FontSize="16" Color="#999" />
+										<Text TextWrapping="Wrap" Font="Light" Value="{absence}" FontSize="14" Color="#000" />
+										<Text TextWrapping="Wrap" Font="Light" Value="{late}" FontSize="14" Color="#000" />
+									</StackPanel>
+								</DockPanel>
+							</Page>
+						</PageControl>
+						<Text ux:Class="Operation" Font="Regular" TextAlignment="Center" Alignment="Center"
+							Color="#fff" FontSize="22" />
+						<Operation ux:Name="doneText" >Done</Operation>
+						<Operation ux:Name="postponeText">Postponed</Operation>
+						<Image ux:Class="Icon" Width="20" Height="20" Margin="30" />
+						<Icon ux:Name="checkmarkIcon" Alignment="CenterLeft"
+							File="Assets/Icons/Checkmark.png" />
+						<Icon ux:Name="postponeIcon" Alignment="CenterRight"
+							File="Assets/Icons/Postpone.png" />
+						<Rectangle>
+							<SolidColor ux:Name="background" Color="#fff" />
+						</Rectangle>
+					</Panel>
+				</Each>
+			</StackPanel>
+		</ScrollView>
+	</DockPanel>
+</App>

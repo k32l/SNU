@@ -1,0 +1,16 @@
+{
+  "RootNamespace":"",
+  "Packages": [
+    "Fuse",
+    "FuseJS",
+    "Uno.Permissions"
+  ],
+  "Includes": [
+    "*",
+    "*.js:Bundle",
+    "Foreign/Course.java:Java:Android",
+    "Foreign/BeaconDetectorService.java:Java:Android",
+    "Foreign/BluetoothAlert.java:Java:Android",
+    "Foreign/CallBack.java:Java:Android"
+  ]
+}

@@ -1,0 +1,22 @@
+<!--menu button-->
+<Panel ux:Name="Menu">
+    <ux:Include File="SignOutAnimation.ux"/>
+    <Rectangle ux:Class="rect" Fill="White" CornerRadius="5" Height="5" Width="30" Margin="0,1.5">
+        <Stroke Width="1" Brush="#999"/>
+    </Rectangle>
+
+    <Panel Alignment="Center" Margin="10" HitTestMode="LocalBounds">
+        <Grid RowCount="3">
+            <rect ux:Name="rect1" />
+            <rect ux:Name="rect2" />
+            <rect ux:Name="rect3" />
+        </Grid>
+        
+        <Clicked>
+            <Scale>
+                <Keyframe Value="0.8,0.8" Time="0.05"/>
+                <Keyframe Value="1,1" Time="0.1"/>
+            </Scale>
+        </Clicked>
+    </Panel>    
+</Panel>
